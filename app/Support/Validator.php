@@ -12,12 +12,13 @@
 
 namespace App\Support;
 
+use Exception;
 use Github\Client as GithubClient;
 use Illuminate\Support\Facades\File;
 
 class Validator
 {
-    public function validateDirectoryExists($param)
+    public function isValidSourceDirectory($param)
     {
         if (!File::exists($param)) {
             return false;
@@ -27,28 +28,28 @@ class Validator
             return false;
         }
 
-        if (empty(File::files($param))) {
+        if (empty(File::allFiles($param))) {
             return false;
         }
 
         return (bool) realpath($param);
     }
 
-    public function validateDirectoryEmpty($param)
+    public function isValidTargetDirectory($param)
     {
         if (File::exists($param)) {
             if (!File::isDirectory($param)) {
                 return false;
             }
 
-            if (!empty(File::files($param))) {
+            if (!empty(File::allFiles($param))) {
                 return false;
             }
 
             return true;
         }
 
-        mkdir($this->targetPath, 0700, true);
+        mkdir($param, 0700, true);
 
         if (!File::exists($param)) {
             return false;
@@ -57,26 +58,30 @@ class Validator
         return true;
     }
 
-    public function validatePAT($personalAccessToken)
-    {
-        $prefixerClient = (new PrefixerClient())->authenticate($personalAccessToken);
-
-        return $prefixerClient->isAuthenticated();
-    }
-
-    public function validateProject($personalAccessToken, $projectId)
+    public function isPersonalAccessToken($personalAccessToken)
     {
         try {
             $prefixerClient = (new PrefixerClient())->authenticate($personalAccessToken);
-            $prefixerClient->project($projectId);
 
-            return true;
-        } finally {
+            return $prefixerClient->isAuthenticated();
+        } catch (Exception $e) {
             return false;
         }
     }
 
-    public function validateGAT($githubAccessToken)
+    public function isValidProjectId($personalAccessToken, int $projectId)
+    {
+        try {
+            $prefixerClient = (new PrefixerClient())->authenticate($personalAccessToken);
+            $response = $prefixerClient->project($projectId);
+
+            return $projectId === $response->project->id;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    public function isValidGithubAccessToken($githubAccessToken)
     {
         try {
             $githubClient = new GithubClient();

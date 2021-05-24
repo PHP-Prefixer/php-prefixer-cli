@@ -21,26 +21,61 @@ use Tests\TestCase;
  */
 final class ValidatorTest extends TestCase
 {
-    public function testValidateDirectoryExists()
+    public function testIsValidSourceDirectory()
     {
-        $this->assertTrue((new Validator())->validateDirectoryExists(env('SOURCE_DIRECTORY')));
-        $this->assertFalse((new Validator())->validateDirectoryExists('/nono'));
+        $validator = new Validator();
+        $this->assertTrue($validator->isValidSourceDirectory(env('SOURCE_DIRECTORY')));
+        $this->assertFalse($validator->isValidSourceDirectory('/nono'));
     }
 
-    public function testValidateDirectoryEmpty()
+    public function testIsValidTargetDirectory()
     {
+        $validator = new Validator();
         $targetDirectory = env('TARGET_DIRECTORY');
         $this->assertTrue(File::exists($targetDirectory));
-        $this->assertEmpty(File::files($targetDirectory));
+        $this->assertEmpty(File::allFiles($targetDirectory));
 
-        $this->assertTrue((new Validator())->validateDirectoryEmpty($targetDirectory));
+        $this->assertTrue($validator->isValidTargetDirectory($targetDirectory));
 
         touch($targetDirectory.'/test');
-        $this->assertFalse((new Validator())->validateDirectoryEmpty($targetDirectory));
+        $this->assertFalse($validator->isValidTargetDirectory($targetDirectory));
         unlink($targetDirectory.'/test');
 
         rmdir($targetDirectory);
-        $this->assertTrue((new Validator())->validateDirectoryEmpty($targetDirectory));
+        $this->assertTrue($validator->isValidTargetDirectory($targetDirectory));
         $this->assertTrue(File::exists($targetDirectory));
+    }
+
+    public function testIsPersonalAccessToken()
+    {
+        $validator = new Validator();
+
+        $pat = env('PERSONAL_ACCESS_TOKEN');
+        $this->assertTrue($validator->isPersonalAccessToken($pat));
+
+        $pat = env('INVALID_PERSONAL_ACCESS_TOKEN');
+        $this->assertFalse($validator->isPersonalAccessToken($pat));
+    }
+
+    public function testIsValidProjectId()
+    {
+        $validator = new Validator();
+
+        $pat = env('PERSONAL_ACCESS_TOKEN');
+        $projectId = env('PROJECT_ID');
+
+        $this->assertTrue($validator->isValidProjectId($pat, $projectId));
+        $this->assertFalse($validator->isValidProjectId($pat, 404));
+    }
+
+    public function testIsValidGithubAccessToken()
+    {
+        $validator = new Validator();
+
+        $gat = env('GITHUB_ACCESS_TOKEN');
+        $this->assertTrue($validator->isValidGithubAccessToken($gat));
+
+        $gat = env('INVALID_GITHUB_ACCESS_TOKEN');
+        $this->assertFalse($validator->isValidGithubAccessToken($gat));
     }
 }

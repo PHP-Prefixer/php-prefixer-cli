@@ -15,7 +15,6 @@ namespace App\Support;
 use Exception;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Psr7\Utils;
-use Psr\Http\Message\ResponseInterface;
 
 class PrefixerClient
 {
@@ -32,22 +31,22 @@ class PrefixerClient
 
     public function isAuthenticated()
     {
-        $user = $this->user();
+        $response = $this->user();
 
-        return $user->id > 0;
+        return $response->user->id > 0;
     }
 
     public function user()
     {
-        return $this->request('GET', 'user');
+        return $this->request('GET', '/user');
     }
 
-    public function project($projectId)
+    public function project(int $projectId)
     {
-        return $this->request('GET', 'projects/'.$projectId);
+        return $this->request('GET', '/projects/'.$projectId);
     }
 
-    public function createBuild($projectId, $zipFilename, $githubAccessToken = null)
+    public function createBuild(int $projectId, $zipFilename, $githubAccessToken = null)
     {
         $options = [
             'multipart' => [
@@ -68,36 +67,37 @@ class PrefixerClient
 
         return $this->request(
             'POST',
-            'projects/'.$projectId.'/build',
+            '/projects/'.$projectId.'/build',
             $options
         );
     }
 
-    public function build($projectId, $buildId)
+    public function build(int $projectId, int $buildId)
     {
         return $this->request(
             'GET',
-            'projects/'.$projectId.'/builds/'.$buildId
+            '/projects/'.$projectId.'/builds/'.$buildId
         );
     }
 
-    public function download($projectId, $buildId)
+    public function download(int $projectId, int $buildId)
     {
         return $this->request(
             'GET',
-            'projects/'.$projectId.'/builds/'.$buildId.'/download'
+            '/projects/'.$projectId.'/builds/'.$buildId.'/download'
         );
     }
 
-    public function downloadLog($projectId, $buildId)
+    public function downloadLog(int $projectId, int $buildId, $file)
     {
         return $this->request(
             'GET',
-            'projects/'.$projectId.'/builds/'.$buildId.'/download/log'
+            '/projects/'.$projectId.'/builds/'.$buildId.'/download/log',
+            ['sink' => $file]
         );
     }
 
-    private function request(string $method, $relApiUri = '', array $options = []): ResponseInterface
+    private function request(string $method, $relApiUri = '', array $options = [])
     {
         $options = array_merge($this->jsonHeaders(), $options);
 
@@ -108,7 +108,11 @@ class PrefixerClient
         );
 
         if (200 === $res->getStatusCode()) {
-            return json_decode($res->getBody());
+            if (\in_array('application/json', $res->getHeader('Content-Type'), true)) {
+                return json_decode($res->getBody());
+            }
+
+            return $res;
         }
 
         throw new Exception($res->getReasonPhrase(), $res->getStatusCode());

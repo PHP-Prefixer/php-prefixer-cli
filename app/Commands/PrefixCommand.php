@@ -52,7 +52,7 @@ class PrefixCommand extends Command
         $validator = new Validator();
         $sourceDirectory = $this->argumentOrEnv('source-directory');
 
-        if (!$sourcePath = $validator->validateDirectoryExists($sourceDirectory)) {
+        if (!$sourcePath = $validator->isValidSourceDirectory($sourceDirectory)) {
             $this->error("{$sourceDirectory} not found");
 
             return 1;
@@ -60,13 +60,13 @@ class PrefixCommand extends Command
 
         $targetPath = $this->argumentOrEnv('target-directory');
 
-        if (!$sourcePath = $validator->validateDirectoryEmpty($sourceDirectory)) {
+        if (!$sourcePath = $validator->isValidTargetDirectory($sourceDirectory)) {
             $this->error("{$sourceDirectory} not found");
 
             return 1;
         }
 
-        if (!$personalAccessToken = $validator->validatePAT($this->argumentOrEnv('personal-access-token'))) {
+        if (!$personalAccessToken = $validator->isPersonalAccessToken($this->argumentOrEnv('personal-access-token'))) {
             $this->error(
                 'The Personal Access Token is invalid. Please, generate a new token on https://php-prefixer.com.'
             );
@@ -74,7 +74,7 @@ class PrefixCommand extends Command
             return 1;
         }
 
-        if (!$projectId = $validator->validateProject($personalAccessToken, $this->argumentOrEnv('project-id'))) {
+        if (!$projectId = $validator->isValidProjectId($personalAccessToken, (int) $this->argumentOrEnv('project-id'))) {
             $this->error(
                 'The Project ID is invalid'
             );
@@ -84,7 +84,7 @@ class PrefixCommand extends Command
 
         $githubAccessToken = $this->optionOrEnv('github-access-token');
 
-        if ($githubAccessToken && !$validator->validateGAT($githubAccessToken)) {
+        if ($githubAccessToken && !$validator->isValidGithubAccessToken($githubAccessToken)) {
             $this->error(
                 'The Github Access Token is invalid'
             );
