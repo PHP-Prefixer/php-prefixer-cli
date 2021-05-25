@@ -33,7 +33,7 @@ final class ZipManagerTest extends TestCase
         $this->assertTrue($status);
         $this->assertFileExists($tmpZip);
 
-        $targetDirectory = env('TARGET_DIRECTORY')
+        $targetDirectory = env('TARGET_DIRECTORY');
         $zipManager->uncompress($tmpZip, $targetDirectory);
 
         $this->assertFileExists($targetDirectory.'/app');

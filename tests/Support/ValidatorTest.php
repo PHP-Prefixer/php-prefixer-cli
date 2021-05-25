@@ -30,6 +30,8 @@ final class ValidatorTest extends TestCase
 
     public function testIsValidTargetDirectory()
     {
+        $this->cleanTargetDirectory();
+
         $validator = new Validator();
         $targetDirectory = env('TARGET_DIRECTORY');
         $this->assertTrue(File::exists($targetDirectory));

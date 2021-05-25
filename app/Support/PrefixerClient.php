@@ -29,7 +29,7 @@ class PrefixerClient
         return $this;
     }
 
-    public function isAuthenticated()
+    public function isAuthenticated(): bool
     {
         $response = $this->user();
 

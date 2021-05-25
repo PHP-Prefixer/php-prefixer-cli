@@ -1,5 +1,5 @@
 {
-  "name": "project/mock-source",
+  "name": "project/mock-broken-composer-source",
   "description": "The Project Mockup for Testing.",
   "keywords": [
     "php-prefixer"
@@ -11,9 +11,8 @@
     "illuminate/support": "^5.8"
   },
 
-  "require": {
-    "danielstjules/stringy": "^3.1",
-    "league/uri": "^5.3",
+... It is broken ...
+
     "vlucas/phpdotenv": "^3.3",
     "illuminate/support": "^5.8",
     "simplepie/simplepie": "^1.5",

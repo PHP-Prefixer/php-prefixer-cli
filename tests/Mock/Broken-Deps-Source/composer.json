@@ -1,5 +1,5 @@
 {
-  "name": "project/mock-source",
+  "name": "project/mock-broken-deps-source",
   "description": "The Project Mockup for Testing.",
   "keywords": [
     "php-prefixer"
@@ -12,7 +12,11 @@
   },
 
   "require": {
-    "danielstjules/stringy": "^3.1",
+    "anibalsanchez/extly-html-asset-tags-builder": "dev-master",
+    "anibalsanchez/extly-infrastructure-cms-contract": "dev-master",
+    "anibalsanchez/extly-infrastructure-cms-joomla": "dev-master",
+    "anibalsanchez/extly-infrastructure-support": "dev-master || dev-php56",
+    "danielstjules/stringy": "^99.99",
     "league/uri": "^5.3",
     "vlucas/phpdotenv": "^3.3",
     "illuminate/support": "^5.8",

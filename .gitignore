@@ -1,6 +1,6 @@
 composer.phar
 /vendor
-/tests/Mock/Source/vendor
+/tests/Mock/*/vendor
 /.idea
 /.vscode
 /.vagrant

@@ -32,16 +32,19 @@ class Processor
         $zipManager->compress($sourcePath, $tmpZip);
 
         $response = $this->prefixerClient->createBuild($projectId, $tmpZip, $githubAccessToken);
-
-        $build = $response->build;
         unlink($tmpZip);
 
+        $build = $response->build;
         $this->waitForProcessing($build);
-        $downloadedZip = $this->download($build, $targetPath);
-        $zipManager->uncompress($downloadedZip, $targetPath);
-        unlink($downloadedZip);
-
         $response = $this->prefixerClient->build($build->project_id, $build->id);
+
+        $build = $response->build;
+        $downloadedZip = $this->download($build, $targetPath);
+
+        if ($downloadedZip) {
+            $zipManager->uncompress($downloadedZip, $targetPath);
+            unlink($downloadedZip);
+        }
 
         return $build;
     }
@@ -63,7 +66,7 @@ class Processor
         $response = $this->prefixerClient->build($build->project_id, $build->id);
         $build = $response->build;
 
-        return !\in_array($build->state, ['success', 'failed'], true);
+        return !\in_array($build->state, ['success', 'failed', 'cancelled'], true);
     }
 
     private function download($build, $targetPath)
@@ -72,7 +75,11 @@ class Processor
             return $this->prefixerClient->download($build->project_id, $build->id, $targetPath);
         }
 
-        // Failed
-        return $this->prefixerClient->downloadLog($build->project_id, $build->id, $targetPath);
+        if ('failed' === $build->state) {
+            return $this->prefixerClient->downloadLog($build->project_id, $build->id, $targetPath);
+        }
+
+        // cancelled
+        return null;
     }
 }

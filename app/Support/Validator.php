@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\File;
 
 class Validator
 {
-    public function isValidSourceDirectory($param)
+    public function isValidSourceDirectory(string $param): bool
     {
         if (!File::exists($param)) {
             return false;
@@ -35,7 +35,7 @@ class Validator
         return (bool) realpath($param);
     }
 
-    public function isValidTargetDirectory($param)
+    public function isValidTargetDirectory(string $param): bool
     {
         if (File::exists($param)) {
             if (!File::isDirectory($param)) {
@@ -58,7 +58,7 @@ class Validator
         return true;
     }
 
-    public function isPersonalAccessToken($personalAccessToken)
+    public function isPersonalAccessToken(string $personalAccessToken): bool
     {
         try {
             $prefixerClient = (new PrefixerClient())->authenticate($personalAccessToken);
@@ -69,7 +69,7 @@ class Validator
         }
     }
 
-    public function isValidProjectId($personalAccessToken, int $projectId)
+    public function isValidProjectId(string $personalAccessToken, int $projectId): bool
     {
         try {
             $prefixerClient = (new PrefixerClient())->authenticate($personalAccessToken);
@@ -81,7 +81,7 @@ class Validator
         }
     }
 
-    public function isValidGithubAccessToken($githubAccessToken)
+    public function isValidGithubAccessToken(string $githubAccessToken): bool
     {
         try {
             $githubClient = new GithubClient();

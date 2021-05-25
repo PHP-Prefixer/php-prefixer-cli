@@ -46,27 +46,26 @@ class PrefixCommand extends Command
      */
     public function handle()
     {
-        $appName = config('app.name');
-        $invalidPersonalAccessToken = env('INVALID_PERSONAL_ACCESS_TOKEN');
-
         $validator = new Validator();
-        $sourceDirectory = $this->argumentOrEnv('source-directory');
+        $sourceDirectory = realpath($this->argumentOrEnv('source-directory'));
 
-        if (!$sourcePath = $validator->isValidSourceDirectory($sourceDirectory)) {
+        if (!$validator->isValidSourceDirectory($sourceDirectory)) {
             $this->error("{$sourceDirectory} not found");
 
             return 1;
         }
 
-        $targetPath = $this->argumentOrEnv('target-directory');
+        $targetDirectory = realpath($this->argumentOrEnv('target-directory'));
 
-        if (!$sourcePath = $validator->isValidTargetDirectory($sourceDirectory)) {
-            $this->error("{$sourceDirectory} not found");
+        if (!$validator->isValidTargetDirectory($targetDirectory)) {
+            $this->error("{$targetDirectory} not found");
 
             return 1;
         }
 
-        if (!$personalAccessToken = $validator->isPersonalAccessToken($this->argumentOrEnv('personal-access-token'))) {
+        $personalAccessToken = $this->argumentOrEnv('personal-access-token');
+
+        if (!$validator->isPersonalAccessToken($personalAccessToken)) {
             $this->error(
                 'The Personal Access Token is invalid. Please, generate a new token on https://php-prefixer.com.'
             );
@@ -74,7 +73,9 @@ class PrefixCommand extends Command
             return 1;
         }
 
-        if (!$projectId = $validator->isValidProjectId($personalAccessToken, (int) $this->argumentOrEnv('project-id'))) {
+        $projectId = (int) $this->argumentOrEnv('project-id');
+
+        if (!$validator->isValidProjectId($personalAccessToken, $projectId)) {
             $this->error(
                 'The Project ID is invalid'
             );
@@ -93,11 +94,26 @@ class PrefixCommand extends Command
         }
 
         $processor = new Processor($personalAccessToken);
-        $processor->run($sourcePath, $targetPath, $projectId, $githubAccessToken);
+        $build = $processor->run($sourceDirectory, $targetDirectory, $projectId, $githubAccessToken);
 
-        $this->info('Project prefixed successfully');
+        switch ($build->state) {
+            case 'success':
+                $this->info('Project prefixed successfully.');
 
-        return 0;
+                return 0;
+            case 'cancelled':
+                $this->error('Project prefixing cancelled.');
+
+                return 1;
+            case 'failed':
+                $this->error('Project prefixing failed.');
+
+                return 1;
+        }
+
+        $this->error('Project prefixing error.' - $build->state);
+
+        return 1;
     }
 
     private function argumentOrEnv($key)

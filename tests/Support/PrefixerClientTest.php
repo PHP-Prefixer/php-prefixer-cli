@@ -47,6 +47,9 @@ final class PrefixerClientTest extends TestCase
         $this->apiClient()->project(404);
     }
 
+    /**
+     * @group disabled
+     */
     public function testCreateBuild()
     {
         $projectId = (int) env('PROJECT_ID');

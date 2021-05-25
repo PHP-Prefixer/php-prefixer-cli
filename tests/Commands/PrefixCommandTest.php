@@ -15,24 +15,49 @@ namespace Tests\Commands;
 use Tests\TestCase;
 
 /**
- * @group disabled
  * @coversNothing
  */
 final class PrefixCommandTest extends TestCase
 {
     public function testPrefix()
     {
+        $this->cleanTargetDirectory();
+
         $this->artisan(
             'prefix',
             [
-                'source-directory' => 'source-directory',
-                'target-directory' => 'target-directory',
-                'personal-access-token' => 'personal-access-token',
-                'project-id' => 'project-id',
+                'source-directory' => env('SOURCE_DIRECTORY'),
+                'target-directory' => env('TARGET_DIRECTORY'),
+                'personal-access-token' => env('PERSONAL_ACCESS_TOKEN'),
+                'project-id' => env('PROJECT_ID'),
                 '--github-access-token' => null,
             ]
         )
-            ->expectsOutput('Simplicity is the ultimate sophistication.')
+            ->expectsOutput('Project prefixed successfully.')
             ->assertExitCode(0);
+
+        $this->assertFileExists(env('TARGET_DIRECTORY').'/composer.json');
+
+        $this->cleanTargetDirectory();
+    }
+
+    public function testCancelledPrefix()
+    {
+        $this->cleanTargetDirectory();
+
+        $this->artisan(
+            'prefix',
+            [
+                'source-directory' => env('BROKEN_COMPOSER_SOURCE_DIRECTORY'),
+                'target-directory' => env('TARGET_DIRECTORY'),
+                'personal-access-token' => env('PERSONAL_ACCESS_TOKEN'),
+                'project-id' => env('PROJECT_ID'),
+                '--github-access-token' => null,
+            ]
+        )
+            ->expectsOutput('Project prefixing cancelled.')
+            ->assertExitCode(1);
+
+        $this->cleanTargetDirectory();
     }
 }
