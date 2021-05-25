@@ -51,8 +51,10 @@ final class PrefixerClientTest extends TestCase
     {
         $projectId = (int) env('PROJECT_ID');
         $sourceDirectory = env('SOURCE_DIRECTORY');
+        $githubAccessToken = env('GITHUB_ACCESS_TOKEN');
         $projectZip = realpath($sourceDirectory.'/../Source.zip');
-        $response = $this->apiClient()->createBuild($projectId, $projectZip);
+
+        $response = $this->apiClient()->createBuild($projectId, $projectZip, $githubAccessToken);
 
         $this->assertSame('initial-state', $response->build->state);
     }
@@ -73,34 +75,31 @@ final class PrefixerClientTest extends TestCase
     {
         $projectId = (int) env('PROJECT_ID');
         $buildId = (int) env('TEST_BUILD_ID');
-        $response = $this->apiClient()->download($projectId, $buildId);
+        $targetDirectory = env('TARGET_DIRECTORY');
+        $downloadedFile = $this->apiClient()->download($projectId, $buildId, $targetDirectory);
 
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertTrue(\in_array('application/x-zip', $response->getHeader('Content-Type'), true));
+        $this->assertStringEndsWith('.zip', $downloadedFile);
+        $this->fileExists($downloadedFile);
+        unlink($downloadedFile);
 
         $this->expectExceptionCode(404);
-        $this->apiClient()->download($projectId, 404);
+        $this->apiClient()->download($projectId, 404, $targetDirectory);
     }
 
     public function testLogDownload()
     {
         $projectId = (int) env('PROJECT_ID');
         $buildId = (int) env('TEST_BUILD_ID');
+        $targetDirectory = env('TARGET_DIRECTORY');
 
-        $tmpFile = tempnam(getcwd(), 'ppp');
-        $response = $this->apiClient()->downloadLog($projectId, $buildId, $tmpFile);
+        $downloadedFile = $this->apiClient()->downloadLog($projectId, $buildId, $targetDirectory);
 
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertTrue(\in_array('application/x-zip', $response->getHeader('Content-Type'), true));
-
-        $contentDisposition = $response->getHeader('Content-Disposition');
-        list(, $filename) = explode('filename=', $contentDisposition[0]);
-        $this->assertStringEndsWith('.log.zip', $filename);
-
-        unlink($tmpFile);
+        $this->assertStringEndsWith('.log.zip', $downloadedFile);
+        $this->fileExists($downloadedFile);
+        unlink($downloadedFile);
 
         $this->expectExceptionCode(404);
-        $this->apiClient()->downloadLog($projectId, 404, $tmpFile);
+        $this->apiClient()->download($projectId, 404, $targetDirectory);
     }
 
     private function apiClient()

@@ -14,7 +14,7 @@ namespace App\Support;
 
 class Processor
 {
-    const WAIT_TIMEOUT = 15;
+    const WAIT_TIMEOUT = 30;
     private $personalAccessToken;
 
     private $prefixerClient;
@@ -25,47 +25,54 @@ class Processor
         $this->prefixerClient = (new PrefixerClient())->authenticate($this->personalAccessToken);
     }
 
-    public function run($sourcePath, $targetPath, $projectId, $githubAccessToken = null)
+    public function run($sourcePath, $targetPath, int $projectId, $githubAccessToken = null)
     {
-        $tmpZip = $this->temporaryZipFilename($sourcePath, $targetPath, $projectId, $githubAccessToken);
-
         $zipManager = new ZipManager();
-        $zipManager->compress($this->sourcePath, $tmpZip);
+        $tmpZip = $this->temporaryZipFilename($targetPath);
+        $zipManager->compress($sourcePath, $tmpZip);
 
-        $build = $this->prefixerClient->createBuild($tmpZip, $projectId, $this->githubAccessToken);
-        $build = $this->waitForProcessing($build);
-        $downloadedZip = $this->download($build);
-        $zipManager->uncompress($downloadedZip, $this->targetPath);
+        $response = $this->prefixerClient->createBuild($projectId, $tmpZip, $githubAccessToken);
+
+        $build = $response->build;
+        unlink($tmpZip);
+
+        $this->waitForProcessing($build);
+        $downloadedZip = $this->download($build, $targetPath);
+        $zipManager->uncompress($downloadedZip, $targetPath);
+        unlink($downloadedZip);
+
+        $response = $this->prefixerClient->build($build->project_id, $build->id);
+
+        return $build;
     }
 
-    private function temporaryZipFilename()
+    private function temporaryZipFilename($targetPath)
     {
-        return tempnam($this->targetPath, 'PPP').'.zip';
+        return $targetPath.'/'.basename($targetPath).'.zip';
     }
 
     private function waitForProcessing($build)
     {
-        while ($updatedBuild = $this->isProcessing($build)) {
+        while ($this->isProcessing($build)) {
             sleep(self::WAIT_TIMEOUT);
         }
-
-        return $updatedBuild;
     }
 
     private function isProcessing($build)
     {
-        $nuild = $this->prefixerClient->build($build->project_id, $build->build_id);
+        $response = $this->prefixerClient->build($build->project_id, $build->id);
+        $build = $response->build;
 
         return !\in_array($build->state, ['success', 'failed'], true);
     }
 
-    private function download($build)
+    private function download($build, $targetPath)
     {
         if ('success' === $build->state) {
-            return $this->prefixerClient->download($build->project_id, $build->build_id);
+            return $this->prefixerClient->download($build->project_id, $build->id, $targetPath);
         }
 
         // Failed
-        return $this->prefixerClient->downloadLog($build->project_id, $build->build_id);
+        return $this->prefixerClient->downloadLog($build->project_id, $build->id, $targetPath);
     }
 }

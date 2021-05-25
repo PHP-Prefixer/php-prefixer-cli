@@ -80,21 +80,51 @@ class PrefixerClient
         );
     }
 
-    public function download(int $projectId, int $buildId)
+    public function download(int $projectId, int $buildId, $targetDirectory)
     {
-        return $this->request(
-            'GET',
-            '/projects/'.$projectId.'/builds/'.$buildId.'/download'
+        return $this->downloadWithSink(
+            '/projects/'.$projectId.'/builds/'.$buildId.'/download',
+            $targetDirectory
         );
     }
 
-    public function downloadLog(int $projectId, int $buildId, $file)
+    public function downloadLog(int $projectId, int $buildId, $targetDirectory)
     {
-        return $this->request(
-            'GET',
+        return $this->downloadWithSink(
             '/projects/'.$projectId.'/builds/'.$buildId.'/download/log',
-            ['sink' => $file]
+            $targetDirectory
         );
+    }
+
+    private function downloadWithSink($downloadUri, $targetDirectory)
+    {
+        $sink = $this->temporaryZipFilename($targetDirectory);
+
+        try {
+            $response = $this->request(
+                'GET',
+                $downloadUri,
+                [
+                    'sink' => $sink,
+                ]
+            );
+
+            if (200 !== $response->getStatusCode() ||
+                !\in_array('application/x-zip', $response->getHeader('Content-Type'), true)) {
+                unlink($sink);
+
+                throw new Exception('Unexpected response', $response->getStatusCode());
+            }
+
+            $downloadedFile = $targetDirectory.'/'.$this->filename($response);
+            rename($sink, $downloadedFile);
+        } catch (Exception $e) {
+            unlink($sink);
+
+            throw $e;
+        }
+
+        return $downloadedFile;
     }
 
     private function request(string $method, $relApiUri = '', array $options = [])
@@ -128,5 +158,18 @@ class PrefixerClient
                 'Authorization' => 'Bearer '.$this->personalAccessToken,
             ],
         ];
+    }
+
+    private function filename($response)
+    {
+        $contentDisposition = $response->getHeader('Content-Disposition');
+        list(, $filename) = explode('filename=', $contentDisposition[0]);
+
+        return $filename;
+    }
+
+    private function temporaryZipFilename($targetPath)
+    {
+        return tempnam($targetPath, 'PPP-');
     }
 }
