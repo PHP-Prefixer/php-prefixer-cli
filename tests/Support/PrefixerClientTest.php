@@ -49,6 +49,12 @@ final class PrefixerClientTest extends TestCase
 
     public function testCreateBuild()
     {
+        $projectId = (int) env('PROJECT_ID');
+        $sourceDirectory = env('SOURCE_DIRECTORY');
+        $projectZip = realpath($sourceDirectory.'/../Source.zip');
+        $response = $this->apiClient()->createBuild($projectId, $projectZip);
+
+        $this->assertSame('initial-state', $response->build->state);
     }
 
     public function testBuild()

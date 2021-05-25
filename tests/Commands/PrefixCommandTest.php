@@ -15,6 +15,7 @@ namespace Tests\Commands;
 use Tests\TestCase;
 
 /**
+ * @group disabled
  * @coversNothing
  */
 final class PrefixCommandTest extends TestCase

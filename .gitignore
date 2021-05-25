@@ -8,3 +8,4 @@ composer.phar
 .phan
 /builds
 .env
+tests/Mock/Source.zip

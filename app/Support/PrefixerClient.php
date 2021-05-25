@@ -46,14 +46,14 @@ class PrefixerClient
         return $this->request('GET', '/projects/'.$projectId);
     }
 
-    public function createBuild(int $projectId, $zipFilename, $githubAccessToken = null)
+    public function createBuild(int $projectId, $zipFile, $githubAccessToken = null)
     {
         $options = [
             'multipart' => [
                 [
                     'name' => 'uploaded_source_file',
-                    'filename' => basename($zipFilename),
-                    'contents' => Utils::tryFopen($zipFilename, 'r'),
+                    'filename' => basename($zipFile),
+                    'contents' => Utils::tryFopen($zipFile, 'r'),
                 ],
             ],
         ];
@@ -67,7 +67,7 @@ class PrefixerClient
 
         return $this->request(
             'POST',
-            '/projects/'.$projectId.'/build',
+            '/projects/'.$projectId.'/builds',
             $options
         );
     }
@@ -99,15 +99,17 @@ class PrefixerClient
 
     private function request(string $method, $relApiUri = '', array $options = [])
     {
-        $options = array_merge($this->jsonHeaders(), $options);
+        $options = array_merge($this->headers(), $options);
 
         $res = (new GuzzleClient())->request(
-            'GET',
+            $method,
             self::API_BASE_URI.$relApiUri,
             $options,
         );
 
-        if (200 === $res->getStatusCode()) {
+        $statusCode = $res->getStatusCode();
+
+        if (200 === $statusCode || 201 === $statusCode) {
             if (\in_array('application/json', $res->getHeader('Content-Type'), true)) {
                 return json_decode($res->getBody());
             }
@@ -118,11 +120,10 @@ class PrefixerClient
         throw new Exception($res->getReasonPhrase(), $res->getStatusCode());
     }
 
-    private function jsonHeaders()
+    private function headers()
     {
         return [
             'headers' => [
-                'Content-Type' => 'application/json',
                 'Accept' => 'application/json, text/plain, */*',
                 'Authorization' => 'Bearer '.$this->personalAccessToken,
             ],
