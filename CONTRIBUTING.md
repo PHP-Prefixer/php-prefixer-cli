@@ -2,7 +2,7 @@
 
 Contributions are **welcome** and will be fully **credited**.
 
-We accept contributions via Pull Requests on [Github](https://github.com/php-prefixer/php-prefixer-rest-api-cli).
+We accept contributions via Pull Requests on [Github](https://github.com/php-prefixer/php-prefixer-cli).
 
 ## Pull Requests
 

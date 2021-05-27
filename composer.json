@@ -1,13 +1,13 @@
 {
-    "name": "php-prefixer/php-prefixer-rest-api-cli",
-    "description": "A REST client for the PHP-Prefixer service.",
-    "keywords": ["php-prefixer", "php", "prefixer", "service", "rest", "cli"],
+    "name": "php-prefixer/php-prefixer-cli",
+    "description": "A command-line for the PHP-Prefixer service.",
+    "keywords": ["php-prefixer", "php", "prefixer", "service", "rest", "cli", "functions", "namespace", "prefix", "namespaces-php"],
     "homepage": "http://php-prefixer.com/",
     "type": "project",
     "license": "MIT",
     "support": {
-        "issues": "https://github.com/php-prefixer/php-prefixer-rest-api-cli/issues",
-        "source": "https://github.com/php-prefixer/php-prefixer-rest-api-cli"
+        "issues": "https://github.com/php-prefixer/php-prefixer-cli/issues",
+        "source": "https://github.com/php-prefixer/php-prefixer-cli"
     },
     "authors": [
         {
