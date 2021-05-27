@@ -48,9 +48,9 @@ The preferred installation method is with the PHP Prefixer CLI PHAR. You can dow
 
 You can install PHP-Prefixer CLI globally with Composer:
 
-´´´sh
+```sh
 composer global require php-prefixer/php-prefixer-cli
-´´´
+```
 
 ## Usage
 
@@ -58,7 +58,7 @@ To use the command line, you must create an account on [PHP-Prefixer](https://ph
 
 Before using the command line, we recommend checking the documentation and guides here: <https://php-prefixer.com/docs/>
 
-The command line requires four parameters, and it can receive an additional parameter:
+The command line requires four parameters, and it can receive an additional parameter for GitHub integration:
 
 Parameter | Description
 ---------|----------
@@ -69,23 +69,28 @@ project-id * | The identification of the configured project on [PHP-Prefixer](ht
 --github-access-token | An optional GitHub token to access ´composer.json´ dependencies that are managed in private repositories.
 
 ```bash
-  # Sample command line
-  php-prefixer-cli prefix \
-      # Source Directory
-      /sample/acme_project \
-      # Target Directory
-      /sample/prefixed_project \
-      # Personal Access Token
-      789|Qkfuf79mLwXBCoEhpxLl12DJbeqUJKs03ZFAq2Nd \
-      # Project ID
-      123456 \
-      # GitHub Access Token
-      --github-access-token=95c889f375458a9b33988af375458a3387ba6
+# Sample command line
+php-prefixer-cli prefix \
+\
+    # Source Directory
+    /sample/acme_project \
+\
+    # Target Directory
+    /sample/prefixed_project \
+\
+    # Personal Access Token
+    789|Qkfuf79mLwXBCoEhpxLl12DJbeqUJKs03ZFAq2Nd \
+\
+    # Project ID
+    123456 \
+\
+    # GitHub Access Token
+    --github-access-token=95c889f375458a9b33988af375458a3387ba6
 ```
 
 ### Environment Variables
 
-The command line supports the definition of the parameters as environment variables in a `.env` file in a project
+The command line supports the definition of the parameters as environment variables in a project `.env` file.
 
 ```yml
 # Sample .env
@@ -114,25 +119,29 @@ GITHUB_ACCESS_TOKEN="95c889f375458a9b33988af375458a3387ba6"
 
 ## Command Line Development
 
-Clone the project
+Clone the project:
 
 ```bash
   git clone https://github.com/php-prefixer/php-prefixer-cli
 ```
 
-Go to the project directory
+Go to the project directory:
 
 ```bash
   cd php-prefixer-cli
 ```
 
-Install dependencies
+Install dependencies:
 
 ```bash
   composer update
 ```
 
-### Running Tests
+Build the PHAR:
+
+```bash
+  php-prefixer-cli app:build
+```
 
 To run tests, run the following command:
 
