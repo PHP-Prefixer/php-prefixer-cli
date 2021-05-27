@@ -11,11 +11,11 @@ A command-line for the [PHP-Prefixer](https://php-prefixer.com) service. The com
 Given this sample class declaration:
 
 ```php
-namespace ACME\Carbon;
+namespace Carbon;
 
-use ACME\Carbon\Exceptions\InvalidDateException;
+use Carbon\Exceptions\InvalidDateException;
 use DateInterval;
-use ACME\Symfony\Component\Translation;
+use Symfony\Component\Translation;
 
 class Carbon extends DateTime
 {
