@@ -4,7 +4,11 @@
 
 [![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
 
-A command-line for the [PHP-Prefixer](https://php-prefixer.com) service. The command calls the **PHP-Prefixer** service using the [REST API](https://php-prefixer.com/docs/rest-api-reference/) to submit a project source code, apply the prefixes, wait and download the results.
+A command-line for the [PHP-Prefixer](https://php-prefixer.com) service.
+
+The [PHP-Prefixer](https://php-prefixer.com) service has a command line to use the service locally and process the project source code from your workstation.
+
+The command calls the **PHP-Prefixer** service using the [REST API](https://php-prefixer.com/docs/rest-api-reference/) to submit a project source code, apply the prefixes, wait and download the results.
 
 **PHP-Prefixer** is a cloud service to apply PHP prefixes to namespaces, functions, helpers, traits, interfaces, etc. Start with a Composer project and a set of dependencies, and prefix all library files at once to generate a consistent prefixed codebase.
 
@@ -42,11 +46,11 @@ class Carbon extends DateTime
 
 ### PHAR
 
-The preferred installation method is with the PHP Prefixer CLI PHAR. You can download the latest PHAR from the most recent [Github Releases](https://github.com/PHP-Prefixer/php-prefixer-cli/releases).
+The preferred installation method is with the **PHP Prefixer CLI PHAR**. You can download the latest PHAR from the most recent [Github Releases](https://github.com/PHP-Prefixer/php-prefixer-cli/releases). After downloading it, copy the file into a directory on your local path.
 
 ### Composer
 
-You can install PHP-Prefixer CLI globally with Composer:
+Alternatively, you can install **PHP-Prefixer CLI** globally with Composer:
 
 ```sh
 composer global require php-prefixer/php-prefixer-cli
@@ -54,7 +58,7 @@ composer global require php-prefixer/php-prefixer-cli
 
 ## Usage
 
-To use the command line, you must create an account on [PHP-Prefixer](https://php-prefixer.com/), and prepare your projects with the prefix definition in the `composer.json` schema.
+To use the command line, you must create an account on [PHP-Prefixer](https://php-prefixer.com/) and prepare your projects with the prefix definition in the `composer.json` schema.
 
 Before using the command line, we recommend checking the documentation and guides here: <https://php-prefixer.com/docs/>
 
@@ -79,13 +83,13 @@ php-prefixer-cli prefix \
     /sample/prefixed_project \
 \
     # Personal Access Token
-    789|Qkfuf79mLwXBCoEhpxLl12DJbeqUJKs03ZFAq2Nd \
+    789|1234567890123456789012345678901234567890 \
 \
     # Project ID
     123456 \
 \
     # GitHub Access Token
-    --github-access-token=95c889f375458a9b33988af375458a3387ba6
+    --github-access-token=1234567890123456789012345678901234567890
 ```
 
 ### Environment Variables
@@ -102,13 +106,13 @@ SOURCE_DIRECTORY="/sample/acme_project"
 TARGET_DIRECTORY="/sample/prefixed_project"
 
 # Personal Access Token
-PERSONAL_ACCESS_TOKEN="789|Qkfuf79mLwXBCoEhpxLl12DJbeqUJKs03ZFAq2Nd"
+PERSONAL_ACCESS_TOKEN="789|1234567890123456789012345678901234567890"
 
 # Project ID
 PROJECT_ID="123456"
 
 # GitHub Access Token
-GITHUB_ACCESS_TOKEN="95c889f375458a9b33988af375458a3387ba6"
+GITHUB_ACCESS_TOKEN="1234567890123456789012345678901234567890"
 ```
 
 ## Documentation
