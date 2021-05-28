@@ -105,6 +105,25 @@ final class PrefixerClientTest extends TestCase
         $this->apiClient()->download($projectId, 404, $targetDirectory);
     }
 
+    public function testDeleteBuild()
+    {
+        $projectId = (int) env('PROJECT_ID');
+        $sourceDirectory = env('SOURCE_DIRECTORY');
+        $githubAccessToken = env('GITHUB_ACCESS_TOKEN');
+        $projectZip = realpath($sourceDirectory.'/../Source-No-Composer.zip');
+
+        $response = $this->apiClient()->createBuild($projectId, $projectZip, $githubAccessToken);
+        $build = $response->build;
+
+        $this->assertSame('initial-state', $build->state);
+
+        $response = $this->apiClient()->deleteBuild($projectId, $build->id);
+        $this->assertSame(204, $response->getStatusCode());
+
+        $this->expectExceptionCode(404);
+        $this->apiClient()->build($projectId, $build->id);
+    }
+
     private function apiClient()
     {
         $personalAccessToken = env('PERSONAL_ACCESS_TOKEN');

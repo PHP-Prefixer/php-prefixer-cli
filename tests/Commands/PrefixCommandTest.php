@@ -31,6 +31,7 @@ final class PrefixCommandTest extends TestCase
                 'personal-access-token' => env('PERSONAL_ACCESS_TOKEN'),
                 'project-id' => env('PROJECT_ID'),
                 '--github-access-token' => null,
+                '--delete-build' => true,
             ]
         )
             ->expectsOutput('Project prefixed successfully.')
@@ -53,6 +54,7 @@ final class PrefixCommandTest extends TestCase
                 'personal-access-token' => env('PERSONAL_ACCESS_TOKEN'),
                 'project-id' => env('PROJECT_ID'),
                 '--github-access-token' => null,
+                '--delete-build' => true,
             ]
         )
             ->expectsOutput('Project prefixing cancelled.')

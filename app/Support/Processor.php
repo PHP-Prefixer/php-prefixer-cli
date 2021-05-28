@@ -49,6 +49,11 @@ class Processor
         return $build;
     }
 
+    public function deleteBuild(int $projectId, int $buildId)
+    {
+        return $this->prefixerClient->deleteBuild($projectId, $buildId);
+    }
+
     private function temporaryZipFilename($targetPath)
     {
         return $targetPath.'/'.basename($targetPath).'.zip';

@@ -80,6 +80,14 @@ class PrefixerClient
         );
     }
 
+    public function deleteBuild(int $projectId, int $buildId)
+    {
+        return $this->request(
+            'DELETE',
+            '/projects/'.$projectId.'/builds/'.$buildId
+        );
+    }
+
     public function download(int $projectId, int $buildId, $targetDirectory)
     {
         return $this->downloadWithSink(
@@ -139,7 +147,7 @@ class PrefixerClient
 
         $statusCode = $res->getStatusCode();
 
-        if (200 === $statusCode || 201 === $statusCode) {
+        if (\in_array($statusCode, [200, 201, 202, 204], true)) {
             if (\in_array('application/json', $res->getHeader('Content-Type'), true)) {
                 return json_decode($res->getBody());
             }

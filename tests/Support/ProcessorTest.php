@@ -36,6 +36,8 @@ final class ProcessorTest extends TestCase
 
         $this->assertSame('success', $build->state);
         $this->cleanTargetDirectory();
+
+        $this->deleteBuild($processor, $projectId, $build->id);
     }
 
     public function testCancelledRun()
@@ -55,6 +57,8 @@ final class ProcessorTest extends TestCase
         $this->assertSame('cancelled', $build->state);
         $this->assertSame('Prefixer schema definition error.', $build->state_message);
         $this->cleanTargetDirectory();
+
+        $this->deleteBuild($processor, $projectId, $build->id);
     }
 
     /**
@@ -74,5 +78,12 @@ final class ProcessorTest extends TestCase
         $build = $processor->run($sourceDirectory, $targetDirectory, $projectId);
 
         $this->assertSame('failed', $build->state);
+    }
+
+    private function deleteBuild($processor, int $projectId, int $buildId)
+    {
+        $response = $processor->deleteBuild($projectId, $buildId);
+
+        $this->assertSame(204, $response->getStatusCode());
     }
 }
