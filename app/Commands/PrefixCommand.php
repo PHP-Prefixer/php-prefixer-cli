@@ -60,7 +60,7 @@ class PrefixCommand extends Command
             return 1;
         }
 
-        $targetDirectory = realpath($this->argument('target-directory'));
+        $targetDirectory = $this->argument('target-directory');
 
         if (!$validator->isValidTargetDirectory($targetDirectory)) {
             $this->error("{$targetDirectory} not found");
@@ -125,14 +125,16 @@ class PrefixCommand extends Command
     private function argumentOrEnv($input, $key)
     {
         if (!$input->hasArgument($key) || null === $input->getArgument($key)) {
-            $input->setArgument($key, env(Str::upper(Str::snake($key))));
+            $value = env(Str::upper(Str::replace('-', '_', $key)));
+            $input->setArgument($key, $value);
         }
     }
 
     private function optionOrEnv($input, $key)
     {
         if (!$input->hasOption($key) || null === $input->getOption($key)) {
-            $input->setOption($key, env(Str::upper(Str::snake($key))));
+            $value = env(Str::upper(Str::replace('-', '_', $key)));
+            $input->setOption($key, $value);
         }
     }
 

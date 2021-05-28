@@ -33,11 +33,15 @@ class Validator
             return false;
         }
 
-        return (bool) realpath($param);
+        return true;
     }
 
     public function isValidTargetDirectory(string $param): bool
     {
+        if (empty($param)) {
+            return false;
+        }
+
         if (File::exists($param)) {
             return File::isDirectory($param);
         }
