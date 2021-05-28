@@ -92,21 +92,23 @@ php-prefixer-cli prefix \
 The command line supports the definition of the parameters as environment variables in a project `.env` file.
 
 ```yml
-# Sample .env
+# PHP Prefixer CLI - Sample .env
 
-# Source Directory
+# Note: the .env file must be located in the php-prefixer-cli.phar directory
+
+# Source Directory: The project source directory
 SOURCE_DIRECTORY="/sample/acme_project"
 
-# Target Directory
+# Target Directory: The target directory where the results are stored
 TARGET_DIRECTORY="/output/prefixed_project"
 
-# Personal Access Token
+# Personal Access Token: The personal access token, generated on PHP-Prefixer/ Settings.
 PERSONAL_ACCESS_TOKEN="789|1234567890123456789012345678901234567890"
 
-# Project ID
+# Project ID: The identification of the configured project on PHP-Prefixer/ Projects.
 PROJECT_ID="123456"
 
-# GitHub Access Token
+# GitHub Access Token:  An optional GitHub token to access composer.json dependencies that are managed in private repositories.
 GITHUB_ACCESS_TOKEN="1234567890123456789012345678901234567890"
 ```
 
