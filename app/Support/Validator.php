@@ -13,6 +13,7 @@
 namespace App\Support;
 
 use Exception;
+use Github\Api\CurrentUser;
 use Github\Client as GithubClient;
 use Illuminate\Support\Facades\File;
 
@@ -38,15 +39,7 @@ class Validator
     public function isValidTargetDirectory(string $param): bool
     {
         if (File::exists($param)) {
-            if (!File::isDirectory($param)) {
-                return false;
-            }
-
-            if (!empty(File::allFiles($param))) {
-                return false;
-            }
-
-            return true;
+            return File::isDirectory($param);
         }
 
         mkdir($param, 0700, true);
@@ -86,6 +79,8 @@ class Validator
         try {
             $githubClient = new GithubClient();
             $githubClient->authenticate($githubAccessToken, null, GithubClient::AUTH_ACCESS_TOKEN);
+
+            /** @var $user CurrentUser */
             $user = $githubClient->api('me');
             $me = $user->show();
 

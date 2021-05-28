@@ -35,12 +35,11 @@ final class ValidatorTest extends TestCase
         $validator = new Validator();
         $targetDirectory = env('TARGET_DIRECTORY');
         $this->assertTrue(File::exists($targetDirectory));
-        $this->assertEmpty(File::allFiles($targetDirectory));
 
         $this->assertTrue($validator->isValidTargetDirectory($targetDirectory));
 
         touch($targetDirectory.'/test');
-        $this->assertFalse($validator->isValidTargetDirectory($targetDirectory));
+        $this->assertTrue($validator->isValidTargetDirectory($targetDirectory));
         unlink($targetDirectory.'/test');
 
         rmdir($targetDirectory);
