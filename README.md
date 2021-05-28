@@ -78,7 +78,7 @@ php-prefixer-cli prefix \
 \
     /sample/acme_project \
 \
-    /sample/prefixed_project \
+    /output/prefixed_project \
 \
     789|1234567890123456789012345678901234567890 \
 \
@@ -98,7 +98,7 @@ The command line supports the definition of the parameters as environment variab
 SOURCE_DIRECTORY="/sample/acme_project"
 
 # Target Directory
-TARGET_DIRECTORY="/sample/prefixed_project"
+TARGET_DIRECTORY="/output/prefixed_project"
 
 # Personal Access Token
 PERSONAL_ACCESS_TOKEN="789|1234567890123456789012345678901234567890"
