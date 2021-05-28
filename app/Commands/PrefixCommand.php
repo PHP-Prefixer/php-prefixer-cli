@@ -16,6 +16,8 @@ use App\Support\Processor;
 use App\Support\Validator;
 use Illuminate\Support\Str;
 use LaravelZero\Framework\Commands\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class PrefixCommand extends Command
 {
@@ -30,6 +32,7 @@ class PrefixCommand extends Command
         {personal-access-token : Personal Access Token generates on https://php-prefixer.com}
         {project-id : The project ID to process the source code}
         {--github-access-token= : Github access token for private repositories}
+        {--delete-build : Delete the build after download}
     ';
 
     /**
@@ -46,8 +49,10 @@ class PrefixCommand extends Command
      */
     public function handle()
     {
+        $start = microtime(true);
+
         $validator = new Validator();
-        $sourceDirectory = realpath($this->argumentOrEnv('source-directory'));
+        $sourceDirectory = realpath($this->argument('source-directory'));
 
         if (!$validator->isValidSourceDirectory($sourceDirectory)) {
             $this->error("{$sourceDirectory} not found");
@@ -55,7 +60,7 @@ class PrefixCommand extends Command
             return 1;
         }
 
-        $targetDirectory = realpath($this->argumentOrEnv('target-directory'));
+        $targetDirectory = realpath($this->argument('target-directory'));
 
         if (!$validator->isValidTargetDirectory($targetDirectory)) {
             $this->error("{$targetDirectory} not found");
@@ -63,7 +68,7 @@ class PrefixCommand extends Command
             return 1;
         }
 
-        $personalAccessToken = $this->argumentOrEnv('personal-access-token');
+        $personalAccessToken = $this->argument('personal-access-token');
 
         if (!$validator->isPersonalAccessToken($personalAccessToken)) {
             $this->error(
@@ -73,7 +78,7 @@ class PrefixCommand extends Command
             return 1;
         }
 
-        $projectId = (int) $this->argumentOrEnv('project-id');
+        $projectId = (int) $this->argument('project-id');
 
         if (!$validator->isValidProjectId($personalAccessToken, $projectId)) {
             $this->error(
@@ -83,7 +88,7 @@ class PrefixCommand extends Command
             return 1;
         }
 
-        $githubAccessToken = $this->optionOrEnv('github-access-token');
+        $githubAccessToken = $this->option('github-access-token');
 
         if ($githubAccessToken && !$validator->isValidGithubAccessToken($githubAccessToken)) {
             $this->error(
@@ -93,44 +98,70 @@ class PrefixCommand extends Command
             return 1;
         }
 
+        $deleteBuild = $this->hasOption('delete-build');
+
         $processor = new Processor($personalAccessToken);
         $build = $processor->run($sourceDirectory, $targetDirectory, $projectId, $githubAccessToken);
 
-        switch ($build->state) {
+        if ($deleteBuild) {
+            $processor->deleteBuild($projectId, $build->id);
+        }
+
+        return $this->renderOutput($build->state, $start);
+    }
+
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
+        parent::initialize($input, $output);
+
+        $this->argumentOrEnv($input, 'source-directory');
+        $this->argumentOrEnv($input, 'target-directory');
+        $this->argumentOrEnv($input, 'personal-access-token');
+        $this->argumentOrEnv($input, 'project-id');
+        $this->optionOrEnv($input, 'github-access-token');
+        $this->optionOrEnv($input, 'delete-build');
+    }
+
+    private function argumentOrEnv($input, $key)
+    {
+        if (!$input->hasArgument($key) || null === $input->getArgument($key)) {
+            $input->setArgument($key, env(Str::upper(Str::snake($key))));
+        }
+    }
+
+    private function optionOrEnv($input, $key)
+    {
+        if (!$input->hasOption($key) || null === $input->getOption($key)) {
+            $input->setOption($key, env(Str::upper(Str::snake($key))));
+        }
+    }
+
+    private function renderOutput($state, $start)
+    {
+        $processingTime = round(microtime(true) - $start, 2);
+        $formattedProcessingTime = '  -- Processing time: '.number_format($processingTime).' seconds';
+
+        switch ($state) {
             case 'success':
                 $this->info('Project prefixed successfully.');
+                $this->info($formattedProcessingTime);
 
                 return 0;
             case 'cancelled':
                 $this->error('Project prefixing cancelled.');
+                $this->info($formattedProcessingTime);
 
                 return 1;
             case 'failed':
                 $this->error('Project prefixing failed.');
+                $this->info($formattedProcessingTime);
 
                 return 1;
         }
 
-        $this->error('Project prefixing error.' - $build->state);
+        $this->error('Project prefixing error. ('.$state.')');
+        $this->info($formattedProcessingTime);
 
         return 1;
-    }
-
-    private function argumentOrEnv($key)
-    {
-        if ($value = $this->argument($key)) {
-            return $value;
-        }
-
-        return env($key);
-    }
-
-    private function optionOrEnv($key)
-    {
-        if ($value = $this->option($key)) {
-            return $value;
-        }
-
-        return env(Str::upper(Str::snake($key)));
     }
 }
