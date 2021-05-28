@@ -76,19 +76,14 @@ project-id * | The identification of the configured project on [PHP-Prefixer](ht
 # Sample command line
 php-prefixer-cli prefix \
 \
-    # Source Directory
     /sample/acme_project \
 \
-    # Target Directory
     /sample/prefixed_project \
 \
-    # Personal Access Token
     789|1234567890123456789012345678901234567890 \
 \
-    # Project ID
     123456 \
 \
-    # GitHub Access Token
     --github-access-token=1234567890123456789012345678901234567890
 ```
 
