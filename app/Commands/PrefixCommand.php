@@ -55,7 +55,7 @@ class PrefixCommand extends Command
         $sourceDirectory = realpath($this->argument('source-directory'));
 
         if (!$validator->isValidSourceDirectory($sourceDirectory)) {
-            $this->error("{$sourceDirectory} not found");
+            $this->error("PHP-Prefixer: {$sourceDirectory} not found");
 
             return 1;
         }
@@ -63,7 +63,7 @@ class PrefixCommand extends Command
         $targetDirectory = $this->argument('target-directory');
 
         if (!$validator->isValidTargetDirectory($targetDirectory)) {
-            $this->error("{$targetDirectory} not found");
+            $this->error("PHP-Prefixer: {$targetDirectory} not found");
 
             return 1;
         }
@@ -72,7 +72,7 @@ class PrefixCommand extends Command
 
         if (!$validator->isPersonalAccessToken($personalAccessToken)) {
             $this->error(
-                'The Personal Access Token is invalid. Please, generate a new token on https://php-prefixer.com.'
+                'PHP-Prefixer: the Personal Access Token is invalid. Please, generate a new token on https://php-prefixer.com.'
             );
 
             return 1;
@@ -82,7 +82,7 @@ class PrefixCommand extends Command
 
         if (!$validator->isValidProjectId($personalAccessToken, $projectId)) {
             $this->error(
-                'The Project ID is invalid'
+                'PHP-Prefixer: the Project ID is invalid'
             );
 
             return 1;
@@ -92,7 +92,7 @@ class PrefixCommand extends Command
 
         if ($githubAccessToken && !$validator->isValidGithubAccessToken($githubAccessToken)) {
             $this->error(
-                'The Github Access Token is invalid'
+                'PHP-Prefixer: the Github Access Token is invalid'
             );
 
             return 1;
@@ -145,23 +145,23 @@ class PrefixCommand extends Command
 
         switch ($state) {
             case 'success':
-                $this->info('Project prefixed successfully.');
+                $this->info('PHP-Prefixer: project prefixed successfully');
                 $this->info($formattedProcessingTime);
 
                 return 0;
             case 'cancelled':
-                $this->error('Project prefixing cancelled.');
+                $this->error('PHP-Prefixer: project prefixing cancelled');
                 $this->info($formattedProcessingTime);
 
                 return 1;
             case 'failed':
-                $this->error('Project prefixing failed.');
+                $this->error('PHP-Prefixer: Project prefixing failed');
                 $this->info($formattedProcessingTime);
 
                 return 1;
         }
 
-        $this->error('Project prefixing error. ('.$state.')');
+        $this->error('PHP-Prefixer: project prefixing error ('.$state.')');
         $this->info($formattedProcessingTime);
 
         return 1;
