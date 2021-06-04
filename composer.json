@@ -1,14 +1,21 @@
 {
     "name": "php-prefixer/php-prefixer-cli",
-    "description": "A command-line for the PHP-Prefixer service.",
-    "keywords": ["php-prefixer", "php", "prefixer", "service", "rest", "cli", "functions", "namespace", "prefix", "namespaces-php"],
-    "homepage": "http://php-prefixer.com/",
     "type": "project",
+    "description": "A command-line for the PHP-Prefixer service.",
+    "keywords": [
+        "php-prefixer",
+        "php",
+        "prefixer",
+        "service",
+        "rest",
+        "cli",
+        "functions",
+        "namespace",
+        "prefix",
+        "namespaces-php"
+    ],
+    "homepage": "http://php-prefixer.com/",
     "license": "MIT",
-    "support": {
-        "issues": "https://github.com/php-prefixer/php-prefixer-cli/issues",
-        "source": "https://github.com/php-prefixer/php-prefixer-cli"
-    },
     "authors": [
         {
             "name": "Aníbal Sánchez, Desarrollos Inteligentes Virtuales, SL.",
@@ -16,17 +23,23 @@
         }
     ],
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^7.3 || ^8.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "http-interop/http-factory-guzzle": "^1.0",
         "knplabs/github-api": "^3.0",
         "laminas/laminas-text": "^2.8",
         "laravel-zero/framework": "^8.7",
-        "nelexa/zip": "^4.0"
+        "nelexa/zip": "^4.0",
+        "nunomaduro/laravel-desktop-notifier": "^2.5"
     },
     "require-dev": {
         "mockery/mockery": "^1.4.2",
         "phpunit/phpunit": "^9.5"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
     },
     "autoload": {
         "psr-4": {
@@ -38,12 +51,13 @@
             "Tests\\": "tests/"
         }
     },
-    "config": {
-        "preferred-install": "dist",
-        "sort-packages": true,
-        "optimize-autoloader": true
-    },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "bin": ["application"]
+    "bin": [
+        "application"
+    ],
+    "support": {
+        "issues": "https://github.com/php-prefixer/php-prefixer-cli/issues",
+        "source": "https://github.com/php-prefixer/php-prefixer-cli"
+    }
 }

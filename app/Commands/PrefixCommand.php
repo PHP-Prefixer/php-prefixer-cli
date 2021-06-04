@@ -16,6 +16,8 @@ use App\Support\Processor;
 use App\Support\Validator;
 use Illuminate\Support\Str;
 use LaravelZero\Framework\Commands\Command;
+use NunoMaduro\LaravelDesktopNotifier\Contracts\Notification;
+use NunoMaduro\LaravelDesktopNotifier\Contracts\Notifier;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -146,16 +148,19 @@ class PrefixCommand extends Command
         switch ($state) {
             case 'success':
                 $this->info('PHP-Prefixer: project prefixed successfully');
+                $this->notify('PHP-Prefixer CLI', 'Project prefixed successfully');
                 $this->info($formattedProcessingTime);
 
                 return 0;
             case 'cancelled':
                 $this->error('PHP-Prefixer: project prefixing cancelled');
+                $this->notify('PHP-Prefixer CLI', 'Project prefixing cancelled');
                 $this->info($formattedProcessingTime);
 
                 return 1;
             case 'failed':
                 $this->error('PHP-Prefixer: Project prefixing failed');
+                $this->notify('PHP-Prefixer CLI', 'Project prefixing failed');
                 $this->info($formattedProcessingTime);
 
                 return 1;
@@ -165,5 +170,45 @@ class PrefixCommand extends Command
         $this->info($formattedProcessingTime);
 
         return 1;
+    }
+
+    private function notify($title, $body)
+    {
+        $notifier = app(Notifier::class);
+
+        $notification = app(Notification::class)
+            ->setTitle($title)
+            ->setBody($body);
+
+        $notification = $this->setIcon($notification);
+        $notifier->send($notification);
+    }
+
+    private function setIcon($notification)
+    {
+        $icon = 'config/PHPPrefixer.png';
+
+        return $notification->setIcon($this->extractIcon($icon));
+    }
+
+    private function extractIcon($icon)
+    {
+        $pharPath = \Phar::running(false);
+
+        if (empty($pharPath)) {
+            return $icon;
+        }
+
+        $phar = new \Phar($pharPath);
+        $tmpDir = sys_get_temp_dir();
+        $tmpIcon = $tmpDir.'/'.$icon;
+
+        if (file_exists($tmpIcon)) {
+            return $tmpIcon;
+        }
+
+        $phar->extractTo($tmpDir, $icon);
+
+        return $tmpIcon;
     }
 }
