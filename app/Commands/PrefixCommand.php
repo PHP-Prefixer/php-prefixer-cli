@@ -100,7 +100,7 @@ class PrefixCommand extends Command
             return 1;
         }
 
-        $deleteBuild = $this->hasOption('delete-build');
+        $deleteBuild = (bool) $this->option('delete-build');
 
         $processor = new Processor($personalAccessToken);
         $build = $processor->run($sourceDirectory, $targetDirectory, $projectId, $githubAccessToken);
