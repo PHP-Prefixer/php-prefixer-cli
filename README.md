@@ -150,6 +150,11 @@ To run tests, run the following command:
 phpunit
 ```
 
+## TO-DO
+
+- Parameter to exclude directories from ZIP
+- Filter files to .php, composer.json and composer.lock
+
 ## Contributing
 
 Contributions are always welcome!
