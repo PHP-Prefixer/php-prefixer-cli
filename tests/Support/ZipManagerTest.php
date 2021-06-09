@@ -39,6 +39,10 @@ final class ZipManagerTest extends TestCase
         $this->assertFileExists($targetDirectory.'/app');
         $this->assertFileExists($targetDirectory.'/composer.json');
 
+        $this->assertFileDoesNotExist($targetDirectory.'/vendor/composer/LICENSE');
+        $this->assertFileDoesNotExist($targetDirectory.'/vendor/doctrine/inflector/phpstan.neon.dist');
+        $this->assertFileDoesNotExist($targetDirectory.'/vendor/nesbot/carbon/extension.neon');
+
         unlink($tmpZip);
         $this->cleanTargetDirectory();
     }

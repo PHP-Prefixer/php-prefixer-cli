@@ -159,7 +159,7 @@ class PrefixCommand extends Command
 
                 return 1;
             case 'failed':
-                $this->error('PHP-Prefixer: Project prefixing failed');
+                $this->error('PHP-Prefixer: project prefixing failed');
                 $this->notify('PHP-Prefixer CLI', 'Project prefixing failed');
                 $this->info($formattedProcessingTime);
 

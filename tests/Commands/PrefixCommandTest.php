@@ -34,7 +34,7 @@ final class PrefixCommandTest extends TestCase
                 '--delete-build' => true,
             ]
         )
-            ->expectsOutput('Project prefixed successfully.')
+            ->expectsOutput('PHP-Prefixer: project prefixed successfully')
             ->assertExitCode(0);
 
         $this->assertFileExists(env('TARGET_DIRECTORY').'/composer.json');
@@ -57,7 +57,7 @@ final class PrefixCommandTest extends TestCase
                 '--delete-build' => true,
             ]
         )
-            ->expectsOutput('Project prefixing cancelled.')
+            ->expectsOutput('PHP-Prefixer: project prefixing cancelled')
             ->assertExitCode(1);
 
         $this->cleanTargetDirectory();
