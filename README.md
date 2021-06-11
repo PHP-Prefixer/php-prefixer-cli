@@ -152,8 +152,7 @@ phpunit
 
 ## TO-DO
 
-- Parameter to exclude directories from ZIP
-- Filter files to .php, composer.json and composer.lock
+- Parameter to exclude directories from ZIP, `--exclude`
 
 ## Contributing
 
