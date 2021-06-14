@@ -6,6 +6,8 @@
 
 A command-line for the [PHP-Prefixer](https://php-prefixer.com) service.
 
+**Blog post announcement**: [New PHP-Prefixer CLI: Prefix from the Terminal](https://blog.php-prefixer.com/2021/06/12/new-php-prefixer-cli-prefix-from-the-terminal/)
+
 The [PHP-Prefixer](https://php-prefixer.com) service has a command line to use the service locally and process the project source code from your workstation.
 
 The command calls the **PHP-Prefixer** service using the [REST API](https://php-prefixer.com/docs/rest-api-reference/) to submit a project source code, apply the prefixes, wait and download the results.
