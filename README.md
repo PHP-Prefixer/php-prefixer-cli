@@ -8,7 +8,7 @@ A command-line for the [PHP-Prefixer](https://php-prefixer.com) service.
 
 **Blog post announcement**: [New PHP-Prefixer CLI: Prefix from the Terminal](https://blog.php-prefixer.com/2021/06/12/new-php-prefixer-cli-prefix-from-the-terminal/)
 
-The [PHP-Prefixer](https://php-prefixer.com) service has a command line to use the service locally and process the project source code from your workstation.
+The [PHP-Prefixer](https://php-prefixer.com) service has a command-line (CLI) to use the service locally and process the project source code from your workstation.
 
 The command calls the **PHP-Prefixer** service using the [REST API](https://php-prefixer.com/docs/rest-api-reference/) to submit a project source code, apply the prefixes, wait and download the results.
 
@@ -44,13 +44,15 @@ class Carbon extends DateTime
 ...
 ```
 
-## Installation
+## How to install the CLI?
 
-### PHAR
+You can install the CLI using two ways:
+
+### 1. How to install the PHAR CLI
 
 The preferred installation method is with the **PHP Prefixer CLI PHAR**. You can download the latest PHAR from the most recent [Github Releases](https://github.com/PHP-Prefixer/php-prefixer-cli/releases). After downloading it, copy the file into a directory on your local path.
 
-### Composer
+### 2. Install via Composer
 
 Alternatively, you can install **PHP-Prefixer CLI** globally with Composer:
 
@@ -58,24 +60,26 @@ Alternatively, you can install **PHP-Prefixer CLI** globally with Composer:
 composer global require php-prefixer/php-prefixer-cli
 ```
 
+The source code is available here: <https://github.com/PHP-Prefixer/php-prefixer-cli>
+
 ## Usage
 
-To use the command line, you must create an account on [PHP-Prefixer](https://php-prefixer.com/) and prepare your projects with the prefix definition in the `composer.json` schema.
+To use the CLI, you must create an account on [PHP-Prefixer](https://php-prefixer.com/) and prepare your projects with the prefix definition in the `composer.json` schema.
 
-Before using the command line, we recommend checking the documentation and guides here: <https://php-prefixer.com/docs/>
+Before using the command-line, we recommend checking the documentation and guides here: <https://php-prefixer.com/docs/>
 
-The command line requires four parameters, and it can receive an additional parameter for GitHub integration:
+The CLI requires four parameters to function, and it can receive an additional parameter for GitHub integration:
 
 Parameter | Description
 ---------|----------
-source-directory * | The project source directory.
-target-directory *| The target directory where the results are stored.
-personal-access-token* | The personal access token, generated on [PHP-Prefixer](https://php-prefixer.com/)/ Settings.
-project-id * | The identification of the configured project on [PHP-Prefixer](https://php-prefixer.com/)/ Projects.
---github-access-token | An optional GitHub token to access ´composer.json´ dependencies that are managed in private repositories.
+source-directory * | The project source directory
+target-directory *| The target directory where the results are stored
+personal-access-token* | The personal access token, generated on [PHP-Prefixer](https://php-prefixer.com/) Settings
+project-id * | The identification of the configured project on [PHP-Prefixer](https://php-prefixer.com/) Projects
+--github-access-token | An optional GitHub token to access ´composer.json´ dependencies that are managed in private repositories
 
 ```bash
-# Sample command line
+# Sample command-line
 php-prefixer-cli prefix \
 \
     /sample/acme_project \
@@ -91,7 +95,7 @@ php-prefixer-cli prefix \
 
 ### Environment Variables
 
-The command line supports the definition of the parameters as environment variables in a project `.env` file.
+The CLI supports the definition of the parameters as environment variables in a project `.env` file.
 
 ```yml
 # PHP Prefixer CLI - Sample .env
@@ -104,10 +108,10 @@ SOURCE_DIRECTORY="/sample/acme_project"
 # Target Directory: The target directory where the results are stored
 TARGET_DIRECTORY="/output/prefixed_project"
 
-# Personal Access Token: The personal access token, generated on PHP-Prefixer/ Settings.
+# Personal Access Token: The personal access token, generated on PHP-Prefixer Settings
 PERSONAL_ACCESS_TOKEN="789|1234567890123456789012345678901234567890"
 
-# Project ID: The identification of the configured project on PHP-Prefixer/ Projects.
+# Project ID: The identification of the configured project on PHP-Prefixer Projects
 PROJECT_ID="123456"
 
 # GitHub Access Token:  An optional GitHub token to access composer.json dependencies that are managed in private repositories.
@@ -118,53 +122,55 @@ GITHUB_ACCESS_TOKEN="1234567890123456789012345678901234567890"
 
 - [PHP-Prefixer Documentation](https://php-prefixer.com/docs)
 - [PHP Prefixer CLI](https://php-prefixer.com/docs/command-line)
-- [REST API Referece](https://php-prefixer.com/docs/rest-api-reference/)
+- [REST API Reference](https://php-prefixer.com/docs/rest-api-reference/)
 
-## Command Line Development
+## Command-Line Development
 
-Clone the project:
+Step 1: Clone the project:
 
 ```bash
   git clone https://github.com/php-prefixer/php-prefixer-cli
 ```
 
-Go to the project directory:
+Step 2: Go to the project directory:
 
 ```bash
   cd php-prefixer-cli
 ```
 
-Install dependencies:
+Step 3: Install dependencies:
 
 ```bash
   composer update
 ```
 
-Build the PHAR:
+Step 4: Build the PHAR:
 
 ```bash
   php-prefixer-cli app:build
 ```
 
-To run tests, run the following command:
+Step 5: To run tests, execute the following command:
 
 ```bash
 phpunit
 ```
 
-## TO-DO
+## Roadmap / Ideas
+
+This roadmap is subject to change and should only be used as a general guideline regarding future releases. As long as a version, feature or application is not yet released, the dates are estimated and could be altered.
 
 - Parameter to exclude directories from ZIP, `--exclude`
 
 ## Contributing
 
-Contributions are always welcome!
+The current CLI is a starting point to prefix PHP code. If you want to improve the current commmand-line, contributions are always welcome!
 
-See `CONTRIBUTING.md` for ways to get started.
+See [CONTRIBUTING.md](https://github.com/PHP-Prefixer/php-prefixer-cli/blob/main/CONTRIBUTING.md) for ways to get started.
 
 ## Security
 
-If you discover a security vulnerability within this package, please send an email to Anibal Sanchez at team@php-prefixer.com. All security vulnerabilities will be promptly addressed.
+If you discover a security vulnerability within this package, please email to Anibal Sanchez at team@php-prefixer.com. We address all security vulnerabilities promptly.
 
 ## License
 
