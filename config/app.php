@@ -63,6 +63,6 @@ return [
     */
 
     'providers' => [
-        App\Providers\AppServiceProvider::class,
+        App\Providers\CliAppServiceProvider::class,
     ],
 ];
