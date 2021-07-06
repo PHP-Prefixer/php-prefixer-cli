@@ -10,7 +10,7 @@
  * @see         https://php-prefixer.com
  */
 
-namespace Tests\Commands;
+namespace Tests\Support;
 
 use App\Support\Processor;
 use Tests\TestCase;
