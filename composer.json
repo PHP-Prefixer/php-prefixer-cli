@@ -53,9 +53,6 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "bin": [
-        "application"
-    ],
     "support": {
         "issues": "https://github.com/php-prefixer/php-prefixer-cli/issues",
         "source": "https://github.com/php-prefixer/php-prefixer-cli"
