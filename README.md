@@ -131,25 +131,25 @@ If you want to customize the command-line or help us in the development, please,
 Step 1: Clone the project:
 
 ```bash
-  git clone https://github.com/php-prefixer/php-prefixer-cli
+git clone https://github.com/php-prefixer/php-prefixer-cli
 ```
 
 Step 2: Go to the project directory:
 
 ```bash
-  cd php-prefixer-cli
+cd php-prefixer-cli
 ```
 
 Step 3: Install dependencies:
 
 ```bash
-  composer update
+composer update
 ```
 
 Step 4: Build the PHAR:
 
 ```bash
-  php-prefixer-cli app:build
+./php-prefixer-cli app:build
 ```
 
 Step 5: To run tests, execute the following command:
