@@ -50,7 +50,7 @@ You can install the CLI using two ways:
 
 ### 1. How to install the PHAR CLI
 
-The preferred installation method is with the **PHP Prefixer CLI PHAR**. You can download the latest PHAR from the most recent [Github Releases](https://github.com/PHP-Prefixer/php-prefixer-cli/releases). After downloading it, copy the file into a directory on your local path and assign the execution permissions to run the following command.
+The preferred installation method is with the **PHP Prefixer CLI PHAR**. You can download the latest PHAR from the most recent [Github Releases](https://github.com/PHP-Prefixer/php-prefixer-cli/releases). After downloading it, copy the file into a directory on your local path and assign the execution permissions to run the following commands.
 
 ### 2. Install via Composer
 
