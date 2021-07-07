@@ -80,7 +80,7 @@ project-id * | The identification of the configured project on [PHP-Prefixer](ht
 
 ```bash
 # Sample command-line
-php-prefixer-cli prefix \
+./php-prefixer-cli prefix \
 \
     /sample/acme_project \
 \
