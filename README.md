@@ -126,6 +126,8 @@ GITHUB_ACCESS_TOKEN="1234567890123456789012345678901234567890"
 
 ## Command-Line Development
 
+If you want to customize the command-line or help us in the development, please, check the following steps:
+
 Step 1: Clone the project:
 
 ```bash
