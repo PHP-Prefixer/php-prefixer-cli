@@ -14,7 +14,8 @@ namespace App\Support;
 
 class Processor
 {
-    const WAIT_TIMEOUT = 30;
+    public const WAIT_TIMEOUT = 30;
+
     private $personalAccessToken;
 
     private $prefixerClient;
@@ -77,7 +78,11 @@ class Processor
     private function download($build, $targetPath)
     {
         if ('success' === $build->state) {
-            return $this->prefixerClient->download($build->project_id, $build->id, $targetPath);
+            if (isset($build->build_target_project_file)) {
+                return $this->prefixerClient->download($build->project_id, $build->id, $targetPath);
+            }
+
+            return $this->prefixerClient->downloadLog($build->project_id, $build->id, $targetPath);
         }
 
         if ('failed' === $build->state) {

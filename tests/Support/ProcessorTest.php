@@ -55,7 +55,10 @@ final class ProcessorTest extends TestCase
         $build = $processor->run($sourceDirectory, $targetDirectory, $projectId, $githubAccessToken);
 
         $this->assertSame('cancelled', $build->state);
-        $this->assertSame('Prefixer schema definition error.', $build->state_message);
+        $this->assertSame(
+            'SchemaReader: prefixer schema definition error Syntax error, malformed JSON',
+            $build->state_message
+        );
         $this->cleanTargetDirectory();
 
         $this->deleteBuild($processor, $projectId, $build->id);
