@@ -18,7 +18,7 @@ use GuzzleHttp\Psr7\Utils;
 
 class PrefixerClient
 {
-    const API_BASE_URI = 'https://php-prefixer.com/api/v1';
+    public const API_BASE_URI = 'https://php-prefixer.com/api/v1';
 
     private $personalAccessToken;
 
@@ -171,7 +171,7 @@ class PrefixerClient
     private function filename($response)
     {
         $contentDisposition = $response->getHeader('Content-Disposition');
-        list(, $filename) = explode('filename=', $contentDisposition[0]);
+        [, $filename] = explode('filename=', $contentDisposition[0]);
 
         return $filename;
     }

@@ -147,8 +147,8 @@ class PrefixCommand extends Command
 
         switch ($state) {
             case 'success':
-                $this->info('PHP-Prefixer: project prefixed successfully');
-                $this->notify('PHP-Prefixer CLI', 'Project prefixed successfully');
+                $this->info('PHP-Prefixer: project prefixing completed');
+                $this->notify('PHP-Prefixer CLI', 'Project prefixing completed');
                 $this->info($formattedProcessingTime);
 
                 return 0;

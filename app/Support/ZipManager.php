@@ -19,9 +19,9 @@ use PhpZip\ZipFile;
 class ZipManager
 {
     // Patterns to produce clean packages
-    const HIDDEN_FILES_PATTERN = '~(\/(\.[^/]+))|(^\.[^/]+)~';
-    const VENDOR_PATTERN = '~(^vendor\/|\/vendor\/)~';
-    const NODE_MODULES_PATTERN = '~(^node_modules\/|\/node_modules\/)~';
+    public const HIDDEN_FILES_PATTERN = '~(\/(\.[^/]+))|(^\.[^/]+)~';
+    public const VENDOR_PATTERN = '~(^vendor\/|\/vendor\/)~';
+    public const NODE_MODULES_PATTERN = '~(^node_modules\/|\/node_modules\/)~';
 
     private $excludeVendor = true;
 
@@ -88,7 +88,7 @@ class ZipManager
         return $this->addDirRecursive($zipFile, $projectPath);
     }
 
-    private function addDirRecursive(ZipFile $zipFile, string $inputDir, string $localPath = '/', ?int $compressionMethod = null): ZipFile
+    private function addDirRecursive(ZipFile $zipFile, string $inputDir, string $localPath = '/', int $compressionMethod = null): ZipFile
     {
         if ('' === $inputDir) {
             throw new InvalidArgumentException('The input directory is not specified');
@@ -108,7 +108,7 @@ class ZipManager
         ZipFile $zipFile,
         \Iterator $iterator,
         string $localPath = '/',
-        ?int $compressionMethod = null
+        int $compressionMethod = null
     ): ZipFile {
         if ('' !== $localPath) {
             $localPath = trim($localPath, '\\/');
@@ -166,7 +166,7 @@ class ZipManager
         string $fileSystemDir,
         array $files,
         string $zipPath,
-        ?int $compressionMethod = null
+        int $compressionMethod = null
     ): void {
         $fileSystemDir = rtrim($fileSystemDir, '/\\').\DIRECTORY_SEPARATOR;
 
