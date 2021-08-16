@@ -103,13 +103,42 @@ class PrefixCommand extends Command
         $deleteBuild = (bool) $this->option('delete-build');
 
         $processor = new Processor($personalAccessToken);
-        $build = $processor->run($sourceDirectory, $targetDirectory, $projectId, $githubAccessToken);
+
+        try {
+            $build = $processor->run($sourceDirectory, $targetDirectory, $projectId, $githubAccessToken);
+        } catch (\GuzzleHttp\Exception\ClientException $clientException) {
+            if (!$clientException->hasResponse()) {
+                $this->error('PHP-Prefixer: '.$clientException->getMessage());
+
+                return 1;
+            }
+
+            $response = $clientException->getResponse();
+            $this->error('PHP-Prefixer: '.$response->getReasonPhrase());
+
+            $body = json_decode($response->getBody());
+
+            if (!$body) {
+                return 1;
+            }
+
+            if (isset($body->message)) {
+                $this->error('PHP-Prefixer: '.$body->message);
+            }
+
+            if (isset($body->errors->uploaded_source_file)) {
+                $this->error('PHP-Prefixer: '.
+                    implode(' ', $body->errors->uploaded_source_file));
+            }
+
+            return 1;
+        }
 
         if ($deleteBuild) {
             $processor->deleteBuild($projectId, $build->id);
         }
 
-        return $this->renderOutput($build->state, $start);
+        return $this->renderOutput($build, $start);
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output)
@@ -140,10 +169,12 @@ class PrefixCommand extends Command
         }
     }
 
-    private function renderOutput($state, $start)
+    private function renderOutput($build, $start)
     {
         $processingTime = round(microtime(true) - $start, 2);
         $formattedProcessingTime = '  -- Processing time: '.number_format($processingTime).' seconds';
+
+        $state = $build->state;
 
         switch ($state) {
             case 'success':
@@ -154,12 +185,22 @@ class PrefixCommand extends Command
                 return 0;
             case 'cancelled':
                 $this->error('PHP-Prefixer: project prefixing cancelled');
+
+                if (isset($build->state_message)) {
+                    $this->error('PHP-Prefixer: '.$build->state_message);
+                }
+
                 $this->notify('PHP-Prefixer CLI', 'Project prefixing cancelled');
                 $this->info($formattedProcessingTime);
 
                 return 1;
             case 'failed':
                 $this->error('PHP-Prefixer: project prefixing failed');
+
+                if (isset($build->state_message)) {
+                    $this->error('PHP-Prefixer: '.$build->state_message);
+                }
+
                 $this->notify('PHP-Prefixer CLI', 'Project prefixing failed');
                 $this->info($formattedProcessingTime);
 
