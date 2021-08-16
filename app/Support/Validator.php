@@ -29,7 +29,7 @@ class Validator
             return false;
         }
 
-        if (empty(File::allFiles($param))) {
+        if (empty(File::files($param))) {
             return false;
         }
 
