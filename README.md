@@ -86,7 +86,7 @@ project-id * | The identification of the configured project on [PHP-Prefixer](ht
 \
     /output/prefixed_project \
 \
-    789|1234567890123456789012345678901234567890 \
+    "789|1234567890123456789012345678901234567890" \
 \
     123456 \
 \
