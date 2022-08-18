@@ -35,6 +35,8 @@ class PrefixCommand extends Command
         {project-id : The project ID to process the source code}
         {--github-access-token= : Github access token for private repositories}
         {--delete-build : Delete the build after download}
+        {--include-vendor : Include preinstalled vendor in the build}
+        {--include-all : Include all files in the build instead of only php and composer files}
     ';
 
     /**
@@ -102,10 +104,14 @@ class PrefixCommand extends Command
 
         $deleteBuild = (bool) $this->option('delete-build');
 
+        $includeVendor = (bool) $this->option('include-vendor');
+
+        $includeAll = (bool) $this->option('include-all');
+
         $processor = new Processor($personalAccessToken);
 
         try {
-            $build = $processor->run($sourceDirectory, $targetDirectory, $projectId, $githubAccessToken);
+            $build = $processor->run($sourceDirectory, $targetDirectory, $projectId, $githubAccessToken, $includeVendor, $includeAll);
         } catch (\GuzzleHttp\Exception\ClientException $clientException) {
             if (!$clientException->hasResponse()) {
                 $this->error('PHP-Prefixer: '.$clientException->getMessage());
@@ -151,6 +157,8 @@ class PrefixCommand extends Command
         $this->argumentOrEnv($input, 'project-id');
         $this->optionOrEnv($input, 'github-access-token');
         $this->optionOrEnv($input, 'delete-build');
+        $this->optionOrEnv($input, 'include-vendor');
+        $this->optionOrEnv($input, 'include-all');
     }
 
     private function argumentOrEnv($input, $key)

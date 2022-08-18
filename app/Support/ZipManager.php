@@ -23,11 +23,19 @@ class ZipManager
     public const VENDOR_PATTERN = '~(^vendor\/|\/vendor\/)~';
     public const NODE_MODULES_PATTERN = '~(^node_modules\/|\/node_modules\/)~';
 
-    private $excludeVendor = true;
+    private $includeVendor = false;
+    private $includeAll = false;
 
-    public function excludeVendor($exclude = true)
+    public function includeVendor($include = false)
     {
-        $this->excludeVendor = $exclude;
+        $this->includeVendor = $include;
+
+        return $this;
+    }
+
+    public function includeAll($include = false)
+    {
+        $this->includeAll = $include;
 
         return $this;
     }
@@ -40,13 +48,17 @@ class ZipManager
             $zipFile = $this->addDirRecursiveToZipFile($projectPath);
 
             // Delete all hidden (Unix) files
-            $zipFile->deleteFromRegex(self::HIDDEN_FILES_PATTERN);
+            if ( ! $this->includeAll ) {
+                $zipFile->deleteFromRegex(self::HIDDEN_FILES_PATTERN);
+            }
 
             // Exclude other vendors
-            $zipFile->deleteFromRegex(self::NODE_MODULES_PATTERN);
+            if ( ! $this->includeAll ) {
+                $zipFile->deleteFromRegex(self::NODE_MODULES_PATTERN);
+            }
 
             // Delete vendor (ignore the Customized vendor case)
-            if ($this->excludeVendor) {
+            if ( ! $this->includeVendor && ! $this->includeAll ) {
                 $zipFile->deleteFromRegex(self::VENDOR_PATTERN);
             }
 
@@ -140,7 +152,8 @@ class ZipManager
                 $extension = $file->getExtension();
                 $filename = $file->getFilename();
 
-                if ('php' !== $extension && 'composer.json' !== $filename && 'composer.lock' !== $filename) {
+                if ( ! $this->includeAll && 'php' !== $extension
+                    && 'composer.json' !== $filename && 'composer.lock' !== $filename) {
                     continue;
                 }
 

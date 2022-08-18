@@ -77,6 +77,8 @@ target-directory *| The target directory where the results are stored
 personal-access-token* | The personal access token, generated on [PHP-Prefixer](https://php-prefixer.com/) Settings
 project-id * | The identification of the configured project on [PHP-Prefixer](https://php-prefixer.com/) Projects
 --github-access-token | An optional GitHub token to access ´composer.json´ dependencies that are managed in private repositories
+--include-vendor | include the local preinstalled vendor direcory in the build
+--include-all | include all files from the source direcory instead of only composer relevant and php files
 
 ```bash
 # Sample command-line
@@ -90,7 +92,9 @@ project-id * | The identification of the configured project on [PHP-Prefixer](ht
 \
     123456 \
 \
-    --github-access-token=1234567890123456789012345678901234567890
+    --github-access-token=1234567890123456789012345678901234567890 \
+\
+    --include-vendor
 ```
 
 ### Environment Variables

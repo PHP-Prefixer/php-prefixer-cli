@@ -26,9 +26,12 @@ class Processor
         $this->prefixerClient = (new PrefixerClient())->authenticate($this->personalAccessToken);
     }
 
-    public function run($sourcePath, $targetPath, int $projectId, $githubAccessToken = null)
+    public function run($sourcePath, $targetPath, int $projectId, $githubAccessToken = null, $includeVendor = false, $includeAll = false)
     {
         $zipManager = new ZipManager();
+        $zipManager->includeVendor( $includeVendor );
+        $zipManager->includeAll( $includeAll );
+
         $tmpZip = $this->temporaryZipFilename($targetPath);
         $zipManager->compress($sourcePath, $tmpZip);
 
