@@ -1,7 +1,8 @@
 {
     "name": "php-prefixer/php-prefixer-cli",
-    "type": "project",
     "description": "A command-line for the PHP-Prefixer service.",
+    "license": "MIT",
+    "type": "project",
     "keywords": [
         "php-prefixer",
         "php",
@@ -14,14 +15,17 @@
         "prefix",
         "namespaces-php"
     ],
-    "homepage": "http://php-prefixer.com/",
-    "license": "MIT",
     "authors": [
         {
             "name": "Aníbal Sánchez, Desarrollos Inteligentes Virtuales, SL.",
             "email": "team@php-prefixer.com"
         }
     ],
+    "homepage": "http://php-prefixer.com/",
+    "support": {
+        "issues": "https://github.com/php-prefixer/php-prefixer-cli/issues",
+        "source": "https://github.com/php-prefixer/php-prefixer-cli"
+    },
     "require": {
         "php": "^7.3 || ^8.0",
         "guzzlehttp/guzzle": "^7.0.1",
@@ -36,11 +40,8 @@
         "mockery/mockery": "^1.4.2",
         "phpunit/phpunit": "^9.5"
     },
-    "config": {
-        "optimize-autoloader": true,
-        "preferred-install": "dist",
-        "sort-packages": true
-    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "App\\": "app/"
@@ -51,10 +52,10 @@
             "Tests\\": "tests/"
         }
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "support": {
-        "issues": "https://github.com/php-prefixer/php-prefixer-cli/issues",
-        "source": "https://github.com/php-prefixer/php-prefixer-cli"
+    "config": {
+        "optimize-autoloader": true,
+        "platform-check": false,
+        "preferred-install": "dist",
+        "sort-packages": true
     }
 }
