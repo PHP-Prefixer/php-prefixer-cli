@@ -4,7 +4,7 @@
  * @package     PHP Prefixer REST API CLI
  *
  * @author      Desarrollos Inteligentes Virtuales, SL. <team@div.com.es>
- * @copyright   Copyright (c)2019-2021 Desarrollos Inteligentes Virtuales, SL. All rights reserved.
+ * @copyright   Copyright (c)2019-2022 Desarrollos Inteligentes Virtuales, SL. All rights reserved.
  * @license     MIT
  *
  * @see         https://php-prefixer.com
@@ -12,7 +12,6 @@
 
 namespace App\Support;
 
-use Exception;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Psr7\Utils;
 
@@ -121,12 +120,12 @@ class PrefixerClient
                 !\in_array('application/x-zip', $response->getHeader('Content-Type'), true)) {
                 unlink($sink);
 
-                throw new Exception('Unexpected response', $response->getStatusCode());
+                throw new \Exception('Unexpected response', $response->getStatusCode());
             }
 
             $downloadedFile = $targetDirectory.'/'.$this->filename($response);
             rename($sink, $downloadedFile);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             unlink($sink);
 
             throw $e;
@@ -155,7 +154,7 @@ class PrefixerClient
             return $res;
         }
 
-        throw new Exception($res->getReasonPhrase(), $res->getStatusCode());
+        throw new \Exception($res->getReasonPhrase(), $res->getStatusCode());
     }
 
     private function headers()

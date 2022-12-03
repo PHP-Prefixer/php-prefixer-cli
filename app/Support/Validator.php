@@ -4,7 +4,7 @@
  * @package     PHP Prefixer REST API CLI
  *
  * @author      Desarrollos Inteligentes Virtuales, SL. <team@div.com.es>
- * @copyright   Copyright (c)2019-2021 Desarrollos Inteligentes Virtuales, SL. All rights reserved.
+ * @copyright   Copyright (c)2019-2022 Desarrollos Inteligentes Virtuales, SL. All rights reserved.
  * @license     MIT
  *
  * @see         https://php-prefixer.com
@@ -12,7 +12,6 @@
 
 namespace App\Support;
 
-use Exception;
 use Github\Api\CurrentUser;
 use Github\Client as GithubClient;
 use Illuminate\Support\Facades\File;
@@ -61,7 +60,7 @@ class Validator
             $prefixerClient = (new PrefixerClient())->authenticate($personalAccessToken);
 
             return $prefixerClient->isAuthenticated();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
     }
@@ -73,7 +72,7 @@ class Validator
             $response = $prefixerClient->project($projectId);
 
             return $projectId === $response->project->id;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
     }
